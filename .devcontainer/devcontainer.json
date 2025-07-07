@@ -1,0 +1,64 @@
+// devcontainer.json
+{
+    "name": "Python Development Container",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".",
+        "args": {}
+    },
+    "remoteUser": "vscode",
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+        "ghcr.io/devcontainers-contrib/features/pipx-package:1": {}
+    },
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "python.defaultInterpreterPath": "/workspace/.venv/bin/python",
+                "python.formatting.provider": "black",
+                "python.linting.ruffEnabled": true,
+                "python.linting.mypyEnabled": true,
+                "python.testing.pytestEnabled": true,
+                "editor.formatOnSave": true,
+                "editor.codeActionsOnSave": {
+                    "source.organizeImports": "explicit",
+                    "source.fixAll": "explicit"
+                },
+                "[python]": {
+                    "editor.defaultFormatter": "ms-python.black-formatter",
+                    "editor.formatOnType": true
+                },
+                "terminal.integrated.defaultProfile.linux": "zsh",
+                //"terminal.integrated.fontFamily": "'MesloLGS NF'",
+                "python.analysis.typeCheckingMode": "strict",
+                "python.analysis.diagnosticMode": "workspace"
+            },
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "ms-python.black-formatter",
+                "charliermarsh.ruff",
+                "eamodio.gitlens",
+                "streetsidesoftware.code-spell-checker",
+                "njpwerner.autodocstring",
+                "ms-azuretools.vscode-docker",
+                "visualstudioexptteam.vscodeintellicode",
+                "redhat.vscode-yaml",
+                "ms-toolsai.jupyter",
+                "ms-toolsai.data-science",
+                "ms-toolsai.jupyter-keymap",
+                "matplotlib.matplotlib",
+                "formulahendry.vscode-code-runner"
+            ]
+        }
+    },
+    "postCreateCommand": "poetry config virtualenvs.in-project true && poetry install && poetry run pre-commit install",
+    "mounts": [
+        "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+    ],
+    "containerEnv": {
+        "PIPX_HOME": "/home/vscode/.local/pipx",
+        "PIPX_BIN_DIR": "/home/vscode/.local/bin",
+        "PYTHON_ENV": "development"
+    }
+}
