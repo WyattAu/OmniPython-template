@@ -1,7 +1,7 @@
 # Architecture
 
-Why this monorepo is shaped the way it is. Day-to-day commands: [README](README.md);
-contribution rules: [CONTRIBUTING](CONTRIBUTING.md); the estate-wide contract:
+Why this monorepo is shaped the way it is. Day-to-day commands: see the repo README;
+contribution rules: see CONTRIBUTING at the repo root; the estate-wide contract:
 [OMNI-CORE](https://github.com/WyattAu/engineering-standards/blob/main/OMNI-CORE.md).
 
 ## Principles
