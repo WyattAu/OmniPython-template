@@ -21,8 +21,6 @@ def parse_pub_id(raw: str) -> str:
     Raises:
         ParseError: on empty input, over-long input, or non-printable bytes.
     """
-    if not isinstance(raw, str):  # pragma: no cover - type system enforces
-        raise ParseError("input must be str")
     trimmed = raw.strip()
     if not trimmed:
         raise ParseError("input is empty")

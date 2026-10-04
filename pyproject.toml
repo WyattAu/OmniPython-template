@@ -21,7 +21,14 @@ dev = [
   "pyright>=1.1.380",
   "ruff>=0.8",
   "mkdocs-material>=9.5",
+  # workspace members (editable) so tests import like real consumers do
+  "omni-core",
+  "omnistats",
 ]
+
+[tool.uv.sources]
+omni-core = { workspace = true }
+omnistats = { workspace = true }
 
 # ---------- gates: lint + types + coverage (single source each) ----------
 [tool.ruff]
@@ -42,6 +49,10 @@ known-first-party = ["omni_core", "omnistats"]
 [tool.pyright]
 typeCheckingMode = "strict"
 include = ["packages"]
+# Workspace packages are installed editable from source — their types ARE
+# the sources, so missing stub files are expected and harmless.
+extraPaths = ["packages/omni-core/src", "packages/omnistats/src"]
+reportMissingTypeStubs = false
 
 [tool.pytest.ini_options]
 testpaths = ["packages"]

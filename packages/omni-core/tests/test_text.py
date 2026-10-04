@@ -1,6 +1,8 @@
 """REQ-001: property tests — parsing never crashes on arbitrary input
 (hypothesis = proptest parity with the Rust kits)."""
 
+import contextlib
+
 import pytest
 from hypothesis import given
 from hypothesis import strategies as st
@@ -10,10 +12,8 @@ from omni_core import MAX_LEN, ParseError, parse_pub_id
 
 @given(st.text(max_size=600))
 def test_parse_never_crashes(raw: str) -> None:
-    try:
+    with contextlib.suppress(ParseError):
         parse_pub_id(raw)
-    except ParseError:
-        pass
 
 
 def test_valid_round_trip() -> None:

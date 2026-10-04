@@ -2,7 +2,8 @@ import pytest
 from hypothesis import given
 from hypothesis import strategies as st
 
-from omnistats import ParseError, mean, normalize_id, zscore
+from omni_core import ParseError
+from omnistats import mean, normalize_id, zscore
 
 
 def test_mean() -> None:
@@ -21,7 +22,11 @@ def test_zscore_constant_raises() -> None:
 
 @given(st.lists(st.floats(allow_nan=False, min_value=-1e6, max_value=1e6), min_size=1, max_size=50))
 def test_zscore_finite(values: list[float]) -> None:
-    result = zscore(values, values[0])
+    try:
+        result = zscore(values, values[0])
+    except ValueError:
+        # Documented domain behavior: constant sequences have undefined zscore.
+        return
     assert result == result  # NaN self-check
 
 
