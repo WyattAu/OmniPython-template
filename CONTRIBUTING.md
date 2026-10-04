@@ -1,27 +1,27 @@
-# Contribution Guide
+# Contributing
 
-## Setup
+## The three rules
 
-1. Fork this repo
+1. **Scripts are canonical.** `scripts/*` do the work; `make` wraps them;
+   CI runs the scripts. If CI would do anything `make ci` does not do, fix
+   one of them — never add a CI-only step.
+2. **One source of truth per concern.** Version pins, lint policy, and
+   formatting live in exactly one file each. No parallel configs.
+3. **Decisions are recorded.** Any change to layout, gates, or tooling gets
+   an ADR under `docs/adr/` (start from `0000-record-architecture-decisions.md`).
 
-## Guidelines
+## Workflow
 
-### Contribution Related Guidence
+1. Fork/branch from `main`.
+2. `direnv allow` (or enter a devcontainer) so your shell matches CI.
+3. `make ci` must pass before every push. `make fmt` to autofix.
+4. Update `REQUIREMENTS.md` traceability when behavior changes.
+5. Conventional-commit prefixes (`feat:`, `fix:`, `test:`, `docs:`, `chore:`)
+   keep the changelog greppable.
 
-- Branch naming: `staging/feat/description`, `staging/fix/description`.
-- Since `staging` branch is periodically reviewed and merged into `main` by admin, you can directly commit on `staging` without waiting for pull requests.
+## Estate parity
 
-### Formatting and Structure
-
-#### Naming Conventions
-
-| Type                 | Convention                                                    | Examples                                        |
-| -------------------- | ------------------------------------------------------------- | ----------------------------------------------- |
-| **Folders**          | lowercase-kebab                                               | `api-reference/`, `data-models/`                |
-| **Markdown Files**   | lowercase-kebab                                               | `getting-started.md`, `api-v3.md`               |
-| **React Components** | camelCase                                                     | `themeToggle.tsx`, `codeBlock.js`               |
-| **Utility Files**    | camelCase                                                     | `formatDate.js`, `stringUtils.ts`               |
-| **Assets/Images**    | lowercase_snake for tags, lowercase-kebab for each identifier | `Logo_ib-logo.webp`, `diagram_carnot-cycle.svg` |
-| **Config Files**     | camelCase                                                     | `sidebarItems.js`, `footerLinks.js`             |
-| **Variables**        | camelCase                                                     | `currentUser`, `pageMetadata`                   |
-| **Constants**        | UPPER_SNAKE_CASE                                              | `API_ENDPOINT`, `MAX_ITEMS`                     |
+This template is a member of the WyattAu Omni family. Estate-wide gates,
+policies, and the Omni Core Contract live in
+[engineering-standards](https://github.com/WyattAu/engineering-standards).
+Changes that affect *all* templates belong there, not here.

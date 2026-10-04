@@ -1,27 +1,62 @@
-name: CI Pipeline
+# uv gate matrix: 3.12/3.13 stable + 3.14 as experimental allowed-fail leg,
+# pyright strict, ruff, coverage >=90. Monthly bitrot cron.
+name: CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 6 1 * *" # monthly bitrot
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        python-version: ["3.13"]
-
+        include:
+          - python-version: "3.12"
+            experimental: false
+          - python-version: "3.13"
+            experimental: false
+          - python-version: "3.14"
+            experimental: true
+    continue-on-error: ${{ matrix.experimental }}
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install Poetry
-      run: pipx install poetry
-    - name: Install dependencies
-      run: poetry install --with dev
-    - name: Run linting
-      run: poetry run pre-commit run --all-files
-    - name: Run tests
-      run: poetry run pytest --cov
-    - name: Upload coverage
-      uses: codecov/codecov-action@v4
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: uv sync --frozen
+      - run: make typecheck
+      - run: make test
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: make ci-no-test
+      - run: make lint
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --frozen
+      - run: make docs
+
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./scripts/check-contract.sh

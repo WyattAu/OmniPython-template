@@ -1,25 +1,25 @@
+# Mirrors the CI gates (contract #6).
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v5.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: check-yaml
-      - id: check-added-large-files
-  - repo: https://github.com/psf/black
-    rev: 24.4.2
+      - id: check-toml
+      - id: check-merge-conflict
+      - id: detect-private-key
+  - repo: https://github.com/crate-ci/typos
+    rev: v1
     hooks:
-      - id: black
-  - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
+      - id: typos
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8
     hooks:
-      - id: isort
-        name: isort (python)
-  #- repo: https://github.com/pycqa/flake8
-  #  rev: 7.0.0
-  #  hooks:
-  #    - id: flake8
-  #- repo: https://github.com/pre-commit/mirrors-mypy
-  #  rev: v1.9.0
-  #  hooks:
-  #    - id: mypy
+      - id: gitleaks
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.0
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
