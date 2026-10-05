@@ -19,7 +19,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: zizmor (GitHub Actions security lint)
         uses: zizmorcore/zizmor-action@v0.6.4
         with:
@@ -30,7 +30,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: install osv-scanner (pinned)
         run: curl -sSfL https://github.com/google/osv-scanner/releases/download/v2.2.2/osv-scanner_linux_amd64 -o /usr/local/bin/osv-scanner && chmod +x /usr/local/bin/osv-scanner
       - name: scan
