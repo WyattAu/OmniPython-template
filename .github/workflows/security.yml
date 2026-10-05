@@ -1,0 +1,37 @@
+# Workflow security lint (zizmor) + dependency vulnerability scan (osv).
+# Both are ADVISORY (continue-on-error) until the estate tunes thresholds
+# (LOOP.md graduation policy).
+name: security
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 8 * * 5" # Fridays 08:00 UTC
+
+permissions: read-all
+
+jobs:
+  zizmor:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: zizmor (GitHub Actions security lint)
+        uses: zizmorcore/zizmor-action@v0.6.4
+        with:
+          advanced-security: false
+  osv:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: install osv-scanner (pinned)
+        run: curl -sSfL https://github.com/google/osv-scanner/releases/download/v2.2.2/osv-scanner_linux_amd64 -o /usr/local/bin/osv-scanner && chmod +x /usr/local/bin/osv-scanner
+      - name: scan
+        run: osv-scanner --recursive . || true
