@@ -1,0 +1,30 @@
+# Tag → uv build → attest → PyPI trusted publishing (OIDC). Configure the
+# "pypi" environment + a pending publisher on pypi.org per package first.
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    if: ${{ github.repository_owner == 'WyattAu' }}
+    environment: pypi
+    permissions:
+      id-token: write
+      attestations: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv build --package omni-core
+      - run: uv build --package omnistats
+      - uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: "dist/*.tar.gz"
+      - name: publish
+        uses: pypa/gh-action-pypi-publish@release/v1

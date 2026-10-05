@@ -1,2 +1,67 @@
 # OmniPython-template
-A starting point for python projects
+
+Maximalist Python **monorepo** template: **uv workspaces** + ruff (lint,
+format, security rules) + **pyright strict** + pytest/hypothesis with a
+**≥90% coverage gate** + mkdocs-material + PyPI trusted publishing — nix
+flake, dual devcontainers, VS Code. Part of the
+[WyattAu Omni template family](https://github.com/WyattAu?tab=repositories&q=omni-).
+
+> v2 is a ground-up rewrite of the 2025 poetry-based template (ADR-0001,
+> ADR-0002): one lockfile (`uv.lock`), one linter (ruff), strict types.
+
+## Start here (after "Use this template")
+
+1. Rename packages: `omni-core` / `omnistats` → yours (keep the
+   internal-dependency pair — it's the monorepo pattern).
+2. Pick a door — all resolve to identical toolchains:
+
+   | Door | Command |
+   |---|---|
+   | nix + direnv (host) | `direnv allow` |
+   | Devcontainer (image) | VS Code → *Reopen in Container* |
+   | Devcontainer (nix)  | palette → *Rebuild in Container* → pick `.devcontainer/nix/` |
+
+   No nix, no docker? `./scripts/bootstrap.sh` prints the manual path.
+3. `uv sync --frozen && make ci` — must be green before your first push.
+
+## Make targets
+
+| Target | Gate |
+|---|---|
+| `make build` | `uv build` per package |
+| `make test` | pytest + hypothesis, `--cov-fail-under=90` |
+| `make lint` / `fmt` | ruff check / ruff format+fix |
+| `make typecheck` | pyright **strict** |
+| `make docs` | mkdocs build --strict |
+| `make contract` | Omni Core Contract structural checks |
+| `make ci` | contract + fmt-check + lint + typecheck + test |
+
+## What is inside
+
+```
+pyproject.toml         virtual workspace root + ALL gate configs (ruff/pyright/pytest)
+uv.lock                THE dependency pin (CI installs --frozen, never resolves)
+packages/omni-core     L0 leaf: total functions, REQ-tagged, hypothesis properties
+packages/omnistats     domain package composing on omni-core (workspace source)
+docs/ + mkdocs.yml     material docs site
+scripts/  + Makefile   the gates (make ci == CI)
+docs/adr/              decision log (uv workspaces, ruff stack)
+.github/workflows/     ci (3.12/3.13 + 3.14 tip + pyright + cov), release (trusted publishing), docs, devcontainers
+.forgejo/              thin self-hosted mirror (scripts are canonical)
+```
+
+## Release flow
+
+Tag `v*` → `uv build` → attestation → PyPI **trusted publishing** (OIDC —
+no tokens). One-time setup: add a pending publisher for this repo on
+pypi.org and create the `pypi` GitHub environment.
+
+## Estate pointers
+
+- Gates, policies: [engineering-standards](https://github.com/WyattAu/engineering-standards)
+- Omni Core Contract: [OMNI-CORE.md](https://github.com/WyattAu/engineering-standards/blob/main/OMNI-CORE.md)
+
+## License
+
+Apache-2.0 — commercial use expressly permitted (v1's AGPLv3 retired with
+the poetry stack).

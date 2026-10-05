@@ -1,38 +1,33 @@
-# Security: Use .PHONY to prevent conflicts with files
-.PHONY: install test lint format check-types security-check docker-build docker-run
+# Thin wrapper over scripts/ — the same verbs in every Omni template.
+.PHONY: build test lint fmt fmt-check typecheck docs contract ci clean
 
-install:
-	@echo "Installing dependencies..."
-	poetry install --with dev --sync
+build:
+	uv build --package omni-core
 
 test:
-	@echo "Running tests..."
-	poetry run pytest -v --cov=src --cov-fail-under=90
+	./scripts/test.sh
 
 lint:
-	@echo "Linting code..."
-	poetry run ruff check .
+	./scripts/lint.sh
 
-format:
-	@echo "Formatting code..."
-	poetry run black .
-	poetry run ruff --fix .
+fmt:
+	./scripts/fmt.sh
 
-check-types:
-	@echo "Type checking..."
-	poetry run mypy src
+fmt-check:
+	uv run ruff format --check .
+	uv run ruff check .
 
-security-check:
-	@echo "Security scanning..."
-	poetry run bandit -r src --severity-level high --confidence-level high
-	poetry run safety check --full-report
+typecheck:
+	./scripts/typecheck.sh
 
-docker-build:
-	@echo "Building Docker image..."
-	docker build --pull --no-cache -t package_name:latest .
+docs:
+	./scripts/docs.sh
 
-docker-run:
-	@echo "Running Docker container..."
-	docker run -it --rm -p 8000:8000 --name package_name package_name:latest
+contract:
+	./scripts/check-contract.sh
 
-ci: install lint check-types test security-check
+## What CI gates before merge (mirror of .github/workflows/ci.yml):
+ci: contract fmt-check lint typecheck test
+
+clean:
+	rm -rf dist .venv .pytest_cache .ruff_cache .coverage
