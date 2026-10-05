@@ -24,6 +24,7 @@ dev = [
   # workspace members (editable) so tests import like real consumers do
   "omni-core",
   "omnistats",
+  "pytest-benchmark>=5.3.0",
 ]
 
 [tool.uv.sources]

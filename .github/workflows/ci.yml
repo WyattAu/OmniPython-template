@@ -74,3 +74,15 @@ jobs:
       - uses: astral-sh/setup-uv@v7
       - run: uv sync --frozen
       - run: uv run pytest -q
+
+  # Loop 2: performance budget. Advisory for one loop, then graduates to a
+  # blocking gate (LOOP.md graduation policy). Same scripts/ commands the
+  # developer runs locally - never a CI-only measurement path.
+  perf:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v7
+      - run: uv sync --frozen
+      - run: make bench

@@ -1,5 +1,5 @@
 # Thin wrapper over scripts/ — the same verbs in every Omni template.
-.PHONY: build test lint fmt fmt-check typecheck docs contract ci clean
+.PHONY: bench bench-update build test lint fmt fmt-check typecheck docs contract ci clean
 
 build:
 	uv build --package omni-core
@@ -28,6 +28,12 @@ contract:
 
 ## What CI gates before merge (mirror of .github/workflows/ci.yml):
 ci: contract fmt-check lint typecheck test
+
+bench:
+	./scripts/bench-budget.sh
+
+bench-update:
+	./scripts/bench-budget.sh --update
 
 clean:
 	rm -rf dist .venv .pytest_cache .ruff_cache .coverage

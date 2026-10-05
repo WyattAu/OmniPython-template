@@ -1,0 +1,2 @@
+# Committed performance baseline. Regenerate deliberately with `make bench-update`; never hand-edited.
+test_bench_parse_pub_id	757019.330	ns	gate	174477.936
