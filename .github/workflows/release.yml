@@ -23,7 +23,7 @@ jobs:
       - uses: astral-sh/setup-uv@v6
       - run: uv build --package omni-core
       - run: uv build --package omnistats
-      - uses: actions/attest-build-provenance@v2
+      - uses: actions/attest-build-provenance@v4
         with:
           subject-path: "dist/*.tar.gz"
       - name: publish
