@@ -60,3 +60,17 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - run: ./scripts/check-contract.sh
+
+  # Loop 1: macOS + Windows legs — the shared gates run on Linux; these prove
+  # the workspace resolves, typechecks, and tests on the other platforms.
+  cross-platform:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v7
+      - run: uv sync --frozen
+      - run: uv run pytest -q
