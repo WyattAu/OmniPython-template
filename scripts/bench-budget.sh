@@ -16,7 +16,7 @@ uv sync --frozen
 # used; --no-cov because a benchmark-only run would never meet the coverage gate.
 uv run python -m pytest --benchmark-only --benchmark-json=bench/pytest-bench.json --no-cov -q
 
-python3 - <<'PY' > "$CURRENT"
+python3 - <<'PY' >"$CURRENT"
 import json
 
 report = json.loads(open("bench/pytest-bench.json").read())
