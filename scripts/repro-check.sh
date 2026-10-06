@@ -35,7 +35,7 @@ compare() {
 fingerprint() {
   mkdir -p "$WORK/$1"
   SOURCE_DATE_EPOCH="$EPOCH" uv build --all-packages --out-dir "$WORK/$1" >/dev/null
-  find "$WORK/$1" -type f ! -name '.gitignore' -print0 | sort -z | xargs -0 sha256sum | awk '{print $1, $2}' | sed "s|$WORK/$1/||"
+  find "$WORK/$1" -type f ! -name '.gitignore' -print0 | sort -z | xargs -0 sha256sum     | awk '{print $1, $2}' | sed "s|$WORK/$1/||"
 }
 a="$(fingerprint a)"
 b="$(fingerprint b)"
