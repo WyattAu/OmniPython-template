@@ -17,9 +17,11 @@ jobs:
     permissions:
       id-token: write
       attestations: write
-      contents: read
+      contents: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
       - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7
       - run: uv build --package omni-core
       - run: uv build --package omnistats
@@ -28,3 +30,9 @@ jobs:
           subject-path: "dist/*.tar.gz"
       - name: publish
         uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # release/v1
+      # The GitHub Release is the changelog surface for people who never visit
+      # PyPI; notes are generated from the commits since the previous tag.
+      - name: github release
+        uses: softprops/action-gh-release@5113cdc90fd4d541c801c55356214017bf5ae34b # v3
+        with:
+          generate_release_notes: true
