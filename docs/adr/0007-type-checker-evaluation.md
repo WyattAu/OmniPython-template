@@ -1,4 +1,4 @@
-# ADR-0006: pyright stays; `ty` evaluated and rejected for now
+# ADR-0007: pyright stays; `ty` evaluated and rejected for now
 
 - **Status**: Accepted (loop 8)
 - **Date**: 2026-10-08
