@@ -93,3 +93,5 @@ and compares artifact hashes. Toolchains that are deterministic gate the build;
 toolchains that embed timestamps or build ids by design report the difference
 and explain why, rather than pretending to be reproducible. Rationale and the
 per-toolchain split: `docs/adr/0006-determinism-verification.md`.
+
+> Derived repos receive this line via the template update channel (ADR-0001).
