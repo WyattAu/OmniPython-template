@@ -1,7 +1,7 @@
 # OmniPython-template
 
 Maximalist Python monorepo: **uv workspaces**, ruff (lint+format+security
-rules), **pyright strict**, pytest + hypothesis, mkdocs-material docs.
+rules), **pyright strict + ty**, pytest + hypothesis, mkdocs-material docs.
 
 ```bash
 uv sync
@@ -20,7 +20,8 @@ make ci
 | Gate | Threshold |
 |---|---|
 | ruff | `check` (E/F/I/UP/B/SIM/S/RUF/PT), format |
-| pyright | strict |
+| pyright | strict (primary gate) |
+| ty | second checker, 13x faster, dual-gated |
 | pytest | `--cov-fail-under=90` |
 | hypothesis | property class per behavior (estate parity) |
 | release | uv build + attestation + PyPI trusted publishing |

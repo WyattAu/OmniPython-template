@@ -1,7 +1,27 @@
 # ADR-0007: pyright stays; `ty` evaluated and rejected for now
 
-- **Status**: Accepted (loop 8)
-- **Date**: 2026-10-08
+- **Status**: **Superseded by loop 20** (decision below reversed; both checkers now gate)
+- **Date**: 2026-10-08 (superseded 2026-10-08, loop 20)
+
+## Superseded (loop 20) -- the rejection was a config error, not a tool limit
+
+Re-tested at the **same version** (ty 0.0.85): the 14 `unresolved-import`
+diagnostics reappear until `[tool.ty.environment]` names the workspace member
+sources (`extra-paths` + `root`). With that config, `ty check .` is **clean**
+on `main`, at 0.22s vs pyright's 2.9s. ty was never unable to resolve the
+workspace layout -- it was never told where it was.
+
+Decision: **keep pyright strict AND gate with ty** (`make typecheck` runs
+`scripts/typecheck.sh` then `scripts/typecheck-ty.sh`). Two independent checkers
+means one blind spot cannot silently pass; ~3s of extra CI time is cheap
+against a type contract. `ty` is pinned `>=0.0.85,<0.1` in the dev group so the
+gate is reproducible and Dependabot-driven bumps stay reviewable.
+
+Lesson recorded: a rejection measured *without* the tool's configuration is not
+an evaluation. The original reasoning is kept below unmodified.
+
+## Original decision (loop 8)
+
 
 ## Context
 

@@ -25,6 +25,7 @@ dev = [
   "omni-core",
   "omnistats",
   "pytest-benchmark>=5.3.0",
+  "ty>=0.0.85,<0.1",
 ]
 
 [tool.uv.sources]
@@ -46,6 +47,12 @@ known-first-party = ["omni_core", "omnistats"]
 
 [tool.ruff.lint.per-file-ignores]
 "**/tests/**" = ["S101"] # asserts are the point in tests
+
+[tool.ty.environment]
+# ty needs the uv-workspace member sources on its path; pyright gets this via
+# extraPaths below. Same intent, different key.
+extra-paths = ["packages/omni-core/src", "packages/omnistats/src"]
+root = ["./packages/omni-core/src", "./packages/omnistats/src"]
 
 [tool.pyright]
 typeCheckingMode = "strict"

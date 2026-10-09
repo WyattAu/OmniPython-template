@@ -1,5 +1,5 @@
 # Thin wrapper over scripts/ — the same verbs in every Omni template.
-.PHONY: bench bench-update repro build test lint fmt fmt-check typecheck docs contract ci clean
+.PHONY: bench bench-update repro build test lint fmt fmt-check typecheck typecheck-ty docs contract ci clean
 
 build:
 	uv build --package omni-core
@@ -19,6 +19,7 @@ fmt-check:
 
 typecheck:
 	./scripts/typecheck.sh
+	./scripts/typecheck-ty.sh
 
 docs:
 	./scripts/docs.sh
