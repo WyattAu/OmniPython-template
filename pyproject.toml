@@ -5,7 +5,9 @@ name = "omnipython-workspace"
 version = "0.1.0"
 description = "OmniPython monorepo workspace (virtual root)"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "pytest-randomly>=5.0.0",
+]
 
 [tool.uv]
 package = false
